@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new Schema({
 
@@ -11,6 +12,11 @@ const UserSchema = new Schema({
 		type: String,
 		required: true,
 		unique: true
+	},
+
+	phone: {
+		type: String,
+		required: true
 	},
 
 	password : {
@@ -31,6 +37,16 @@ const UserSchema = new Schema({
 }, {
 	timestamps: true
 });
+
+UserSchema.pre('save', function (next) {
+	let user = this;
+	user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
+	next();
+});
+
+UserSchema.methods.validatePassword = (password) => {
+	return bcrypt.compareSync(password, this.password);
+};
 
 const User = mongoose.model('User', UserSchema);
 

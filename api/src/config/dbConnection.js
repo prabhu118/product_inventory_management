@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import app from '../../server';
 
+mongoose.set('useCreateIndex', true);
+
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.connection.on('connected', () => {

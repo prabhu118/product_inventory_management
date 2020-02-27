@@ -2,7 +2,7 @@
 
 class ProductController {
 
-	addProduct() {
+	static async addProduct() {
         
 	}
 }

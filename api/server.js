@@ -2,12 +2,12 @@ import dotEnv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
-import http from 'http2';
+import http from 'http';
 import router from './src/routes/indexRoutes';
 
 dotEnv.config();
 
-const port = process.env.port || 8000;
+const port = process.env.PORT || 8000;
 
 const app = express();
 
