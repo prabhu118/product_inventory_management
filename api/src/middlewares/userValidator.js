@@ -21,6 +21,9 @@ const ValidateUser = (req, res, next) => {
 			break;
 		case '/user/login':
 			schema = loginSchema;
+			break;
+		default:
+			break;
 		}
 
 		if (!schema) next();

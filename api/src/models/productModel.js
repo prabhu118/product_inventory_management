@@ -2,11 +2,6 @@ import mongoose, { Schema } from 'mongoose';
 
 const ProductSchema = new Schema ({
 
-	productId: {
-		type: String,
-		unique: true
-	},
-
 	productName: {
 		type: String,
 		required: true
