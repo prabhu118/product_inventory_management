@@ -20,11 +20,23 @@ const addToCartSchema = Joi.object().keys({
 const ValidateUser = (req, res, next) => {
 	try {
 		let schema;
-		switch (req.method) {
-		case 'POST':
-		case 'PUT':
-			schema = (req.originalUrl === '/user/cart') ? addToCartSchema : (req.originalUrl === '/user/login') ? loginSchema : addUserSchema;
+		switch (req.originalUrl) {
+		case `${process.env.API_INITIALS}/user`:
+			schema = addUserSchema;
 			break;
+				
+		case `${process.env.API_INITIALS}/user/cart`:
+			schema = addToCartSchema;
+			break;
+
+		case `${process.env.API_INITIALS}/user/login`:
+			schema = loginSchema;
+			break;
+
+			// case 'POST':
+			// case 'PUT':
+			// 	schema = (req.originalUrl === `${process.env.API_INITIALS}/user/cart`) ? addToCartSchema : (req.originalUrl === `${process.env.API_INITIALS}/user/login`) ? loginSchema : addUserSchema;
+			// 	break;
 		default:
 			break;
 		}

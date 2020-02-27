@@ -1,11 +1,12 @@
 import Product from '../models/productModel';
+import User from '../models/userModel';
 
 class ProductController {
 
 	static async getAllProducts(req, res) {
 		try {
 			var count = await Product.find({}).count().exec();
-			var perPage = 2;
+			var perPage = req.query.perPage || 10;
 			var page = req.query.page || 1;
 			var pages = count / perPage;
 			var total = Math.ceil(pages);
@@ -45,11 +46,12 @@ class ProductController {
 	static async deleteProduct(req, res) {
 		try {
 			if(!/^[0-9a-fA-F]{24}$/.test(req.params.id)) return res.status(422).json({success: false, message: 'Invalid product id'});
+			await User.update({ $pull: { cart: { product: req.params.id } }});
 			let result = await Product.find({ _id: req.params.id }).remove().exec();
 			if (result.deletedCount > 0) {
-				return res.json(200).json({ success: true });
+				return res.status(200).json({ success: true });
 			} else {
-				return res.json(404).json({ success: false });
+				return res.status(404).json({ success: false });
 			}
 		} catch (err) {
 			console.log(err);

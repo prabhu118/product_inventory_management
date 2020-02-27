@@ -8,6 +8,8 @@ router.post('/', ValidateUser, UserController.addUser);
 
 router.post('/login', ValidateUser, UserController.login);
 
-router.put('/cart', ValidateRequest, ValidateUser, UserController.addProductToCart);
+router.post('/cart', ValidateRequest, ValidateUser, UserController.addProductToCart);
+
+router.delete('/cart/:productId', ValidateRequest, UserController.deleteProductFromCart);
 
 export default router;

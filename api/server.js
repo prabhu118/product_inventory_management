@@ -21,7 +21,7 @@ require('./src/middlewares/passport');
 
 require('./src/config/dbConnection');
 
-app.use(router);
+app.use(`${process.env.API_INITIALS}`, router);
 
 const server = http.createServer(app);
 
