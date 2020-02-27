@@ -11,7 +11,25 @@ class ProductController {
 			console.log(err);
 		}
 	}
-	
+
+	static async updateProduct(req, res) {
+		try {
+			const { id, productName, productPrice, stock } = req.body;
+			const product = await Product.findByIdAndUpdate(id, { $set: { productName: productName, productPrice: productPrice, stock: stock } }, { new: true }).exec();
+			return res.status(200).json({success:true, product: product});
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	static async deleteProduct(req, res) {
+		try {
+			console.log(req.body);
+		} catch(err) {
+			console.log(err);
+		}
+	}
+
 }
 
 export default ProductController;

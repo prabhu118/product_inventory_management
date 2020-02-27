@@ -6,12 +6,22 @@ const addProductSchema = Joi.object().keys({
 	stock: Joi.number().min(1).required()
 });
 
+const updateProductSchema = Joi.object().keys({
+	id: Joi.string().required(),
+	productName: Joi.string().trim().required(),
+	productPrice: Joi.number().min(1).required(),
+	stock: Joi.number().min(1).required()
+});
+
 const ValidateProduct = (req, res, next) => {
 	try {
 		let schema;
 		switch (req.method) {
 		case 'POST':
 			schema = addProductSchema;
+			break;
+		case 'PUT':
+			schema = updateProductSchema;
 			break;
 		default: 
 			break;

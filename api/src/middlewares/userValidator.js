@@ -2,7 +2,7 @@ import Joi from '@hapi/joi';
 
 const addUserSchema = Joi.object().keys({
 	name: Joi.string().trim().regex(/^[a-zA-Z ]{3,30}$/).required(),
-	email: Joi.string().lowercase().email().required().error(() => 'Email is required'),
+	email: Joi.string().lowercase().email().required(),
 	phone: Joi.string().max(10).required(),
 	password: Joi.string().trim().regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/).required().error(() => 'Password must be minimum eight characters long, at least one letter, one number and one special character.')
 });
