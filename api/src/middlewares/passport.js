@@ -14,7 +14,7 @@ passport.use('local.signin', new LocalStrategy({
 		if (!user) return done(null, false, { message: 'User not registered.' });
 
 		if (!user.validatePassword(password)) {
-			return done(null, false, { message: 'Unauthorzied user.' });
+			return done(null, false, { message: 'Invalid password' });
 		}
 		else {
 			return done(null, user);

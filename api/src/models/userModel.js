@@ -44,6 +44,12 @@ UserSchema.pre('save', function (next) {
 	next();
 });
 
+UserSchema.pre('update', function (next) {
+	let user = this;
+	user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
+	next();
+});
+
 UserSchema.method('validatePassword', function (password) {
 	return bcrypt.compareSync(password, this.password);
 });
