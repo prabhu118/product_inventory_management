@@ -5,7 +5,7 @@ class ProductController {
 	static async getAllProducts(req, res) {
 		try {
 			var count = await Product.find({}).count().exec();
-			var perPage = 10;
+			var perPage = 2;
 			var page = req.query.page || 1;
 			var pages = count / perPage;
 			var total = Math.ceil(pages);
@@ -34,7 +34,8 @@ class ProductController {
 	static async updateProduct(req, res) {
 		try {
 			const { id, productName, productPrice, stock } = req.body;
-			const product = await Product.findByIdAndUpdate(id, { $set: { productName: productName, productPrice: productPrice, stock: stock } }, { new: true }).exec();
+			if(!/^[0-9a-fA-F]{24}$/.test(id)) return res.status(422).json({success: false, message: 'Invalid product id'});
+			const product = await Product.update({_id: id}, { $set: { productName: productName, productPrice: productPrice, stock: stock } }, { new: true }).exec();
 			return res.status(200).json({ success: true, product: product });
 		} catch (err) {
 			console.log(err);
@@ -43,8 +44,13 @@ class ProductController {
 
 	static async deleteProduct(req, res) {
 		try {
-			console.log(req.body);
-			// Product.findByIdAndDelete().exec();
+			if(!/^[0-9a-fA-F]{24}$/.test(req.params.id)) return res.status(422).json({success: false, message: 'Invalid product id'});
+			let result = await Product.find({ _id: req.params.id }).remove().exec();
+			if (result.deletedCount > 0) {
+				return res.json(200).json({ success: true });
+			} else {
+				return res.json(404).json({ success: false });
+			}
 		} catch (err) {
 			console.log(err);
 		}

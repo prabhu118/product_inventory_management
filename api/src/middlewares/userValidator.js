@@ -13,7 +13,7 @@ const loginSchema = Joi.object().keys({
 });
 
 const addToCartSchema = Joi.object().keys({
-	id: Joi.string().required(),
+	product: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required().error(() => 'Invalid Product Id.'),
 	qty: Joi.number().min(1).required()
 });
 
@@ -23,7 +23,7 @@ const ValidateUser = (req, res, next) => {
 		switch (req.method) {
 		case 'POST':
 		case 'PUT':
-			schema = (req.originalUrl === '/user/login') ? loginSchema : (req.originalUrl === '/user/cart') ? addToCartSchema : addUserSchema;
+			schema = (req.originalUrl === '/user/cart') ? addToCartSchema : (req.originalUrl === '/user/login') ? loginSchema : addUserSchema;
 			break;
 		default:
 			break;

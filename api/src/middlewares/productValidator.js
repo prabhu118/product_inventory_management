@@ -7,7 +7,7 @@ const addProductSchema = Joi.object().keys({
 });
 
 const updateProductSchema = Joi.object().keys({
-	id: Joi.string().required(),
+	id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
 	productName: Joi.string().trim().required(),
 	productPrice: Joi.number().min(1).required(),
 	stock: Joi.number().min(1).required()
