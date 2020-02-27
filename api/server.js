@@ -3,6 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import http from 'http';
+import passport from 'passport';
 import router from './src/routes/indexRoutes';
 
 dotEnv.config();
@@ -14,6 +15,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('dev'));
+app.use(passport.initialize());
+
+require('./src/middlewares/passport');
 
 require('./src/config/dbConnection');
 

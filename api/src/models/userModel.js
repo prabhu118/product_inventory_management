@@ -44,9 +44,9 @@ UserSchema.pre('save', function (next) {
 	next();
 });
 
-UserSchema.methods.validatePassword = (password) => {
+UserSchema.method('validatePassword', function (password) {
 	return bcrypt.compareSync(password, this.password);
-};
+});
 
 const User = mongoose.model('User', UserSchema);
 

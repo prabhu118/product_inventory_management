@@ -8,8 +8,8 @@ const addUserSchema = Joi.object().keys({
 });
 
 const loginSchema = Joi.object().keys({
-	email: Joi.string().lowercase().email().required(),
-	password: Joi.string().trim().regex(/^[a-zA-Z0-9]{3,30}$/).required()
+	username: Joi.string().lowercase().email().required(),
+	password: Joi.string().trim().regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/).required().error(() => 'Password must be minimum eight characters long, at least one letter, one number and one special character.')
 });
 
 const ValidateUser = (req, res, next) => {
