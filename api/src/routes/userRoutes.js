@@ -4,6 +4,8 @@ import ValidateUser from '../middlewares/userValidator';
 import ValidateRequest from '../middlewares/auth';
 const router = Router();
 
+router.get('/', ValidateRequest, UserController.getAllUsers);
+
 router.post('/', ValidateUser, UserController.addUser);
 
 router.post('/login', ValidateUser, UserController.login);

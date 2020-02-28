@@ -13,7 +13,7 @@ class ProductController {
 	 */
 	static async getAllProducts(req, res) {
 		try {
-			var count = await Product.find({}).count().exec();
+			var count = await Product.find({}).countDocuments().exec();
 			var perPage = req.query.perPage || 10;
 			var page = req.query.page || 1;
 			var pages = count / perPage;

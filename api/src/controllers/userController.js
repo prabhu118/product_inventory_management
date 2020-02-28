@@ -9,6 +9,36 @@ const logger = getLogger('USER');
 class UserController {
 
 	/**
+	 * @method getAllUsers - To fetch all the users
+	 * @param {*} req 
+	 * @param {success, users, count, totalPages, perPage} res 
+	 */
+	static async getAllUsers(req, res) {
+		try {
+			var count = await User.find({}).countDocuments().exec();
+			var perPage = req.query.perPage || 10;
+			var page = req.query.page || 1;
+			var pages = count / perPage;
+			var total = Math.ceil(pages);
+
+			const users = await User.find({})
+				.populate({
+					path: 'cart.product',
+					model: 'Product',
+					select: '-createdAt -updatedAt'
+				})
+				.skip((perPage * page) - perPage)
+				.limit(perPage)
+				.sort({ createdAt: -1 })
+				.exec();
+			return res.json({ success: true, users: users, count: count, totalPages: total, perPage: perPage });
+		} catch(err) {
+			logger.error({methodName: 'getAllUsers', payload: req.query, error: err});
+			return res.status(500).json({success:false, message: 'Something went wrong'});
+		}
+	}
+
+	/**
 	 * @method addUser - Adds new user to the collection
 	 * @param {*} req - Takes necessary data required to add a user
 	 * @param {success, user} res 
@@ -39,8 +69,8 @@ class UserController {
 			passport.authenticate('local.signin', { session: false }, function (err, user, info) {
 				if (err) return res.status(400).json({ type: false, message: err });
 				if (info) return res.status(400).json({ type: false, message: info.message });
-
-				let data = { email: user.email, userType: user.userType || null, id: user._id };
+				console.log(user);
+				let data = { email: user.email, userType: user.userType || 0, id: user._id };
 				let token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '10h' });
 				return res.status(200).json({ success: true, token: token });
 			})(req, res, next);

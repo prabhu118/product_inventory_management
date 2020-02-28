@@ -32,7 +32,12 @@ const UserSchema = new Schema({
 		qty: {
 			type: Number
 		}
-	}]
+	}],
+
+	userType: {
+		type: Number,
+		default: 0
+	}
 
 }, {
 	timestamps: true
