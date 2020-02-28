@@ -2,7 +2,9 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import User from '../models/userModel';
 
-
+/**
+ * Used to authenticate User
+ */
 passport.use('local.signin', new LocalStrategy({
 	usernameField: 'username',
 	passwordField: 'password'

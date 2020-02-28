@@ -5,11 +5,16 @@ import Product from '../models/productModel';
 
 class UserController {
 
+	/**
+	 * @method addUser - Adds new user to the collection
+	 * @param {*} req - Takes necessary data required to add a user
+	 * @param {success, user} res 
+	 */
 	static async addUser(req, res) {
 		try {
 			const user = new User(req.body);
 			await user.save();
-			return res.status(201).json({ success: true });
+			return res.status(201).json({ success: true, user: user });
 		} catch (err) {
 			if (err.name === 'MongoError' && err.code === 11000) {
 				return res.status(422).json({ success: false, message: err.message });
@@ -17,6 +22,12 @@ class UserController {
 		}
 	}
 
+	/**
+	 * @method login - Authenticates user & returns token
+	 * @param {username, password} req - 
+	 * @param {success, token} res 
+	 * @param {*} next 
+	 */
 	static async login(req, res, next) {
 		try {
 			passport.authenticate('local.signin', { session: false }, function (err, user, info) {
@@ -32,6 +43,11 @@ class UserController {
 		}
 	}
 
+	/**
+	 * @method addProductToCart - Add/update product in cart 
+	 * @param {*} req - Takes required data 
+	 * @param {success, message} res 
+	 */
 	static async addProductToCart(req, res) {
 		try {
 			const product = await Product.findById(req.body.product).exec();
@@ -58,6 +74,11 @@ class UserController {
 		}
 	}
 
+	/**
+	 * @method deleteProductFromCart - Removes product from cart & product collection
+	 * @param {*} req - Takes required data
+	 * @param {success, message} res 
+	 */
 	static async deleteProductFromCart(req, res) {
 		try {
 			if (!/^[0-9a-fA-F]{24}$/.test(req.params.productId)) return res.status(422).json({ success: false, message: 'Invalid product id' });

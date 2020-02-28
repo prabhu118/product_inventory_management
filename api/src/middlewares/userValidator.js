@@ -32,11 +32,7 @@ const ValidateUser = (req, res, next) => {
 		case `${process.env.API_INITIALS}/user/login`:
 			schema = loginSchema;
 			break;
-
-			// case 'POST':
-			// case 'PUT':
-			// 	schema = (req.originalUrl === `${process.env.API_INITIALS}/user/cart`) ? addToCartSchema : (req.originalUrl === `${process.env.API_INITIALS}/user/login`) ? loginSchema : addUserSchema;
-			// 	break;
+			
 		default:
 			break;
 		}

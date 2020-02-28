@@ -3,6 +3,11 @@ import User from '../models/userModel';
 
 class ProductController {
 
+	/**
+	 * @method getAllProducts - Returns list of products (pagination implemented)
+	 * @param {perPage, page} req - Takes 2 query params
+	 * @param {success, products, count, totalPages, perPage} res
+	 */
 	static async getAllProducts(req, res) {
 		try {
 			var count = await Product.find({}).count().exec();
@@ -22,6 +27,11 @@ class ProductController {
 		}
 	}
 
+	/**
+	 * @method addProduct - Adds new product 
+	 * @param {*} req - Takes product data required to add new product
+	 * @param {success, product} res
+	 */
 	static async addProduct(req, res) {
 		try {
 			const product = new Product(req.body);
@@ -32,21 +42,31 @@ class ProductController {
 		}
 	}
 
+	/**
+	 * @method updateProduct - Updates products details
+	 * @param {*} req - Takes required product data
+	 * @param {success, product} res 
+	 */
 	static async updateProduct(req, res) {
 		try {
 			const { id, productName, productPrice, stock } = req.body;
-			if(!/^[0-9a-fA-F]{24}$/.test(id)) return res.status(422).json({success: false, message: 'Invalid product id'});
-			const product = await Product.update({_id: id}, { $set: { productName: productName, productPrice: productPrice, stock: stock } }, { new: true }).exec();
+			if (!/^[0-9a-fA-F]{24}$/.test(id)) return res.status(422).json({ success: false, message: 'Invalid product id' });
+			const product = await Product.update({ _id: id }, { $set: { productName: productName, productPrice: productPrice, stock: stock } }, { new: true }).exec();
 			return res.status(200).json({ success: true, product: product });
 		} catch (err) {
 			console.log(err);
 		}
 	}
 
+	/**
+	 * @method deleteProduct - Removes product from the product collection including the cart
+	 * @param {*} req 
+	 * @param {success} res 
+	 */
 	static async deleteProduct(req, res) {
 		try {
-			if(!/^[0-9a-fA-F]{24}$/.test(req.params.id)) return res.status(422).json({success: false, message: 'Invalid product id'});
-			await User.update({ $pull: { cart: { product: req.params.id } }});
+			if (!/^[0-9a-fA-F]{24}$/.test(req.params.id)) return res.status(422).json({ success: false, message: 'Invalid product id' });
+			await User.update({ $pull: { cart: { product: req.params.id } } });
 			let result = await Product.find({ _id: req.params.id }).remove().exec();
 			if (result.deletedCount > 0) {
 				return res.status(200).json({ success: true });
