@@ -10,10 +10,12 @@ mongoose.connection.on('connected', () => {
 	app.emit('ready');
 	console.log('Successfully connected to database..');
 	mongoose.connection.db.listCollections({name: 'users'})
-		.next((err, collinfo) => {
+		.next(async (err, collinfo) => {
 			try {
 				if (collinfo) {
+					console.log(collinfo);
 					User.findOne({email: 'admin@admin.com'}).then(async res => {
+						console.log(res);
 						if(!res) {
 							const user = new User({
 								name: 'Admin',
@@ -25,6 +27,15 @@ mongoose.connection.on('connected', () => {
 							await user.save();
 						}
 					});
+				} else {
+					const user = new User({
+						name: 'Admin',
+						email: 'admin@admin.com',
+						password: 'admin@123',
+						phone: '8097312287',
+						userType: 1
+					});
+					await user.save();
 				}
 			} catch(err) {
 				console.log(err);
