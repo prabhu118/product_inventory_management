@@ -54,10 +54,10 @@ class ProductController {
 	 */
 	static async updateProduct(req, res) {
 		try {
-			const { id, productName, productPrice, stock } = req.body;
-			if (!/^[0-9a-fA-F]{24}$/.test(id)) return res.status(422).json({ success: false, message: 'Invalid product id' });
-			const product = await Product.update({ _id: id }, { $set: { productName: productName, productPrice: productPrice, stock: stock } }, { new: true }).exec();
-			return res.status(200).json({ success: true, product: product });
+			// const { productName, productPrice, stock } = req.body;
+			if (!/^[0-9a-fA-F]{24}$/.test(req.params.id)) return res.status(422).json({ success: false, message: 'Invalid product id' });
+			await Product.update({ _id: req.params.id }, { $set: req.body}).exec();
+			return res.status(200).json({ success: true, message: 'Product updated' });
 		} catch (err) {
 			logger.error({methodName: 'updateProduct', payload: req.body, user: req.user, error: err});
 			return res.status(500).json({success:false, message: 'Something went wrong'});
