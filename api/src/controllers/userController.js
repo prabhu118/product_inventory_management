@@ -2,6 +2,9 @@ import User from '../models/userModel';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import Product from '../models/productModel';
+import { getLogger } from 'log4js';
+
+const logger = getLogger('USER');
 
 class UserController {
 
@@ -16,8 +19,11 @@ class UserController {
 			await user.save();
 			return res.status(201).json({ success: true, user: user });
 		} catch (err) {
+			logger.error({methodName: 'addUser', payload: req.body, error: err});
 			if (err.name === 'MongoError' && err.code === 11000) {
 				return res.status(422).json({ success: false, message: err.message });
+			} else {
+				return res.status(500).json({success:false, message: 'Something went wrong'});
 			}
 		}
 	}
@@ -39,7 +45,8 @@ class UserController {
 				return res.status(200).json({ success: true, token: token });
 			})(req, res, next);
 		} catch (err) {
-			console.log(err);
+			logger.error({methodName: 'login', payload: req.body, error: err});
+			return res.status(500).json({success:false, message: 'Something went wrong'});
 		}
 	}
 
@@ -71,6 +78,8 @@ class UserController {
 			return res.status(200).json({ success: true, message: `Product added to cart with quntity ${qty}` });
 		} catch (err) {
 			console.log(err);
+			logger.error({methodName: 'addProductToCart', payload: req.body, user: req.user, error: err});
+			return res.status(500).json({success:false, message: 'Something went wrong'});
 		}
 	}
 
@@ -95,7 +104,8 @@ class UserController {
 				return res.status(404).json({ success: false, message: 'Product does not exists in cart' });
 			}
 		} catch (err) {
-			console.log(err);
+			logger.error({methodName: 'deleteProductFromCart', payload: req.params, user: req.user, error: err});
+			return res.status(500).json({success:false, message: 'Something went wrong'});
 		}
 	}
 }

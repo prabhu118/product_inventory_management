@@ -1,5 +1,8 @@
 import Product from '../models/productModel';
 import User from '../models/userModel';
+import { getLogger } from 'log4js';
+
+const logger = getLogger('PRODUCT');
 
 class ProductController {
 
@@ -23,7 +26,8 @@ class ProductController {
 				.exec();
 			return res.json({ success: true, products: products, count: count, totalPages: total, perPage: perPage });
 		} catch (err) {
-			console.log(err);
+			logger.error({methodName: 'getAllProducts', payload: req.query, error: err});
+			return res.status(500).json({success:false, message: 'Something went wrong'});
 		}
 	}
 
@@ -38,7 +42,8 @@ class ProductController {
 			await product.save();
 			return res.status(201).json({ success: true, product: product });
 		} catch (err) {
-			console.log(err);
+			logger.error({methodName: 'addProduct', payload: req.body, user: req.user, error: err});
+			return res.status(500).json({success:false, message: 'Something went wrong'});
 		}
 	}
 
@@ -54,7 +59,8 @@ class ProductController {
 			const product = await Product.update({ _id: id }, { $set: { productName: productName, productPrice: productPrice, stock: stock } }, { new: true }).exec();
 			return res.status(200).json({ success: true, product: product });
 		} catch (err) {
-			console.log(err);
+			logger.error({methodName: 'updateProduct', payload: req.body, user: req.user, error: err});
+			return res.status(500).json({success:false, message: 'Something went wrong'});
 		}
 	}
 
@@ -74,7 +80,8 @@ class ProductController {
 				return res.status(404).json({ success: false });
 			}
 		} catch (err) {
-			console.log(err);
+			logger.error({methodName: 'deleteProduct', payload: req.params, user: req.user, error: err});
+			return res.status(500).json({success:false, message: 'Something went wrong'});
 		}
 	}
 

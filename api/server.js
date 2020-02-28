@@ -4,7 +4,11 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import http from 'http';
 import passport from 'passport';
+import logger from 'log4js';
+import path from 'path';
 import router from './src/routes/indexRoutes';
+
+const loggerConfig = path.join(__dirname, './src/config/logger.json');
 
 dotEnv.config();
 
@@ -16,6 +20,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 app.use(passport.initialize());
+logger.configure(loggerConfig);
+app.use(logger.connectLogger(logger.getLogger('http'), { level: 'auto' }));
 
 require('./src/middlewares/passport');
 
