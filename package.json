@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon --exec babel-node api/server.js",
+    "server": "node dist/api/server.js",
     "build": "rimraf ./dist && babel ./ --out-dir dist/ --ignore ./node_modules/",
     "lint": "./node_modules/.bin/eslint . --ext .js",
     "lint:fix": "npm run lint -- --fix"

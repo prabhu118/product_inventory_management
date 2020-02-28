@@ -5,10 +5,8 @@ import morgan from 'morgan';
 import http from 'http';
 import passport from 'passport';
 import logger from 'log4js';
-import path from 'path';
+import loggerConfig from './src/config/logger';
 import router from './src/routes/indexRoutes';
-
-const loggerConfig = path.join(__dirname, './src/config/logger.json');
 
 dotEnv.config();
 
