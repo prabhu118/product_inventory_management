@@ -7,7 +7,7 @@ import passport from 'passport';
 import logger from 'log4js';
 import loggerConfig from './src/config/logger';
 import router from './src/routes/indexRoutes';
-
+// test
 dotEnv.config();
 
 const port = process.env.PORT || 8000;
